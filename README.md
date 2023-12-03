@@ -13,3 +13,7 @@ Springboot         : 3.20 <br>
 IDE                : IntelliJ <br>
 Framework & Library: Spring Batch, Spring Data JPA, Lombok <br>
 DB                 : MariaDB, H2 <br>
+<br>
+<br>
+
+![io spring movie](https://github.com/jeongdonguk96/movie/assets/110921983/04c9ba29-cbdc-4c37-ab5c-c954c8c5d5fb)
