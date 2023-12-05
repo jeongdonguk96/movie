@@ -20,7 +20,10 @@ public class Company {
     private String companyPartNames;                             // 영화사 분류
     private String ceoNames;                                     // 대표자명
 
-    @OneToMany
-    @JoinColumn(name = "filmography_Id")
+    @JoinColumn(name = "movie_code")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Movie movie;                                         // 영화
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Filmography> filmographies = new ArrayList<>(); // 필모그래피
 }

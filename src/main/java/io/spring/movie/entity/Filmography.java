@@ -18,7 +18,18 @@ public class Filmography {
     private String moviePartName;   // 영화인 참여 역할
     private String companyPartName; // 영화사 참여 역할
 
+    @JoinColumn(name = "actor_people_code")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Actor actor;            // 배우
+
+    @JoinColumn(name = "director_people_code")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Director director;      // 감독
+
+    @JoinColumn(name = "company_code")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;        // 영화사
+
     @OneToOne
-    @JoinColumn(name = "cast_id")
     private Cast cast;              // 배우 역할
 }

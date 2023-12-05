@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +28,16 @@ public class Movie {
     private String auditNo;                               // 심의 번호
     private String watchGradeName;                        // 관람 등급
 
-    @OneToMany
-    @JoinColumn(name = "people_code")
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Director> directors = new ArrayList<>(); // 영화 감독
 
-    @OneToMany
-    @JoinColumn(name = "people_code")
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Actor> actors = new ArrayList<>();       // 출연 배우
 
-    @OneToMany
-    @JoinColumn(name = "company_code")
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Company> companies = new ArrayList<>();  // 참여 영화사
+
+    @JoinColumn(name = "boxoffice_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BoxOffice boxOffice;                          // 박스오피스
 }

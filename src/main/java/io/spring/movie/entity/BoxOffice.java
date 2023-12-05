@@ -16,9 +16,9 @@ import java.util.List;
 public class BoxOffice {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "boxoffice_id")
     private Long boxofficeId;                       // 박스오피스 번호
-    private String rank;                            // 순위
-    private String rankIntensity;                   // 순위 증감분
-    private String rankOldOrNew;                    // 신규 진입 여부
+    private String ranking;                         // 순위
+    private String rankingIntensity;                // 순위 증감분
+    private String rankingOldOrNew;                 // 신규 진입 여부
     private String salesAmount;                     // 해당일 매출액
     private String salesIntensity;                  // 전날 대비 매출액 증감분
     private String salesChange;                     // 전날 대비 매출액 증감 비율
@@ -31,7 +31,6 @@ public class BoxOffice {
     private String showCount;                       // 해당일 상영 횟수
     private String boxofficeGubun;                  // 일별/주간별 구분
 
-    @OneToMany
-    @JoinColumn(name = "movie_code")
+    @OneToMany(mappedBy = "boxOffice", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Movie> movies = new ArrayList<>(); // 영화 정보
 }

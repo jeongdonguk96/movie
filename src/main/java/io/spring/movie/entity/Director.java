@@ -19,7 +19,10 @@ public class Director {
     private String peopleName;                                   // 영화인 이름
     private String sex;                                          // 성별
 
-    @OneToMany
-    @JoinColumn(name = "filmography_Id")
+    @JoinColumn(name = "movie_code")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Movie movie;                                         // 영화
+
+    @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Filmography> filmographies = new ArrayList<>(); // 필모그래피
 }
