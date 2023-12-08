@@ -12,10 +12,20 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
 
-config:
-  key: 52fdceb2126442ff1e661ee05bcb4058
+  batch:
+    jdbc:
+      initialize-schema: always
+
+movie:
+  config:
+    url: http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json
+    key: 52fdceb2126442ff1e661ee05bcb4058
+    curPage: 1
+    itemPerPage: 100
+    peopleName:
+    filmographyName:

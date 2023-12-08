@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigReader {
 
-    @Value("${config.key}")
+//    @Value("${config.key}")
     private String key;
+
+
 }

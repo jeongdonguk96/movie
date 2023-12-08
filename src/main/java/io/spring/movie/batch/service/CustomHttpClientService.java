@@ -1,4 +1,4 @@
-package io.spring.movie.service;
+package io.spring.movie.batch.service;
 
 import io.spring.movie.dto.PeopleListRequestDto;
 import io.spring.movie.exception.CustomBatchException;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Objects;
 
 @Service
 public class CustomHttpClientService {
@@ -23,21 +22,41 @@ public class CustomHttpClientService {
             throw new CustomBatchException("URL은 NULL일 수 없습니다.");
         }
 
-        CloseableHttpClient httpClient = null;
-        CloseableHttpResponse response = null;
         HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse response;
 
-        try {
-            httpClient = HttpClients.createDefault();
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             response = httpClient.execute(httpGet);
 
-        } finally {
-            Objects.requireNonNull(httpClient).close();
+            return response;
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CustomBatchException("HTTP GET 요청 중 에러가 발생했습니다.");
         }
-
-        return response;
     }
+
+//    public static CloseableHttpResponse executeGet(String url) throws IOException {
+//
+//        if (url == null) {
+//            throw new CustomBatchException("URL은 NULL일 수 없습니다.");
+//        }
+//
+//        CloseableHttpClient httpClient = null;
+//        CloseableHttpResponse response = null;
+//        HttpGet httpGet = new HttpGet(url);
+//
+//        try {
+//            httpClient = HttpClients.createDefault();
+//            response = httpClient.execute(httpGet);
+//
+//        } finally {
+//            Objects.requireNonNull(httpClient).close();
+//
+//        }
+//
+//        return response;
+//    }
 
     public static String buildUriParams(PeopleListRequestDto peopleRequestDto) {
 
