@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "TB_BOX_OFFICE")
+@Table(name = "TB_BOXOFFICE")
 @Entity
 @Getter
 @ToString

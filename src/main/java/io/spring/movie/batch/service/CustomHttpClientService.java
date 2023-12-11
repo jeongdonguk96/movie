@@ -27,6 +27,7 @@ public class CustomHttpClientService {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             response = httpClient.execute(httpGet);
+            System.out.println("response = " + response);
 
             return response;
 
