@@ -1,4 +1,4 @@
-package io.spring.movie.batch.reader;
+package io.spring.movie.batch.peoplelistjob;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.spring.movie.batch.service.CustomHttpClientService;

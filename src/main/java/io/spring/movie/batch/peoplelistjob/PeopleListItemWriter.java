@@ -1,4 +1,4 @@
-package io.spring.movie.batch.writer;
+package io.spring.movie.batch.peoplelistjob;
 
 import io.spring.movie.entity.ActorTemp;
 import io.spring.movie.entity.DirectorTemp;
@@ -18,7 +18,7 @@ public class PeopleListItemWriter implements ItemWriter<List<People>> {
     private final DirectorTempRepository directorTempRepository;
 
     @Override
-    public void write(Chunk<? extends List<People>> chunks) throws Exception {
+    public void write(Chunk<? extends List<People>> chunks) {
         for (List<People> chunk : chunks) {
             for (People people : chunk) {
                 if (people instanceof ActorTemp) {

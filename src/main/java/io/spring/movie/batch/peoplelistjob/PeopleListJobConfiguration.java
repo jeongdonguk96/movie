@@ -1,10 +1,7 @@
-package io.spring.movie.batch.job;
+package io.spring.movie.batch.peoplelistjob;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.spring.movie.batch.processor.PeopleTempItemProcessor;
-import io.spring.movie.batch.reader.PeopleListItemReader;
 import io.spring.movie.batch.service.ParsingService;
-import io.spring.movie.batch.writer.PeopleListItemWriter;
 import io.spring.movie.dto.PeopleListRequestDto;
 import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import io.spring.movie.entity.People;
@@ -50,11 +47,11 @@ public class PeopleListJobConfiguration {
     }
 
     @Bean
-    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<People>, ?> peopleTempItemProcessor, ItemWriter<? super List<People>> peopleListItemWriter) {
+    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<People>, ?> peopleListItemProcessor, ItemWriter<? super List<People>> peopleListItemWriter) {
         return new StepBuilder("peopleStep", jobRepository)
                 .chunk(1, transactionManager)
                 .reader(peopleListItemReader)
-                .processor((ItemProcessor<? super Object, ?>) peopleTempItemProcessor)
+                .processor((ItemProcessor<? super Object, ?>) peopleListItemProcessor)
                 .writer((ItemWriter<? super Object>) peopleListItemWriter)
                 .build();
     }
@@ -65,8 +62,8 @@ public class PeopleListJobConfiguration {
     }
 
     @Bean
-    public ItemProcessor<? super List<PeopleDto>, ?> peopleTempItemProcessor() {
-        return new PeopleTempItemProcessor();
+    public ItemProcessor<? super List<PeopleDto>, ?> peopleListItemProcessor() {
+        return new PeopleListItemProcessor();
     }
 
     @Bean

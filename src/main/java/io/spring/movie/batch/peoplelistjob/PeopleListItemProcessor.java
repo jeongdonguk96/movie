@@ -1,4 +1,4 @@
-package io.spring.movie.batch.processor;
+package io.spring.movie.batch.peoplelistjob;
 
 import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import io.spring.movie.entity.ActorTemp;
@@ -9,7 +9,7 @@ import org.springframework.batch.item.ItemProcessor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PeopleTempItemProcessor implements ItemProcessor<List<PeopleDto>, List<People>> {
+public class PeopleListItemProcessor implements ItemProcessor<List<PeopleDto>, List<People>> {
 
     @Override
     public List<People> process(List<PeopleDto> item) {
