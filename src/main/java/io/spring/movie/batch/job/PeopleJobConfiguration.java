@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.spring.movie.batch.reader.PeopleItemReader;
 import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.dto.PeopleListRequestDto;
-import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.People;
+import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -14,6 +14,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -33,9 +34,8 @@ public class PeopleJobConfiguration {
     private final ParsingService parsingService;
     private final ObjectMapper objectMapper;
 
-//    @Bean
+    @Bean
     public Job peopleJob(Step peopleStep) {
-        System.out.println("peopleJob = ");
         return new JobBuilder("peopleJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(peopleStep)
@@ -43,11 +43,10 @@ public class PeopleJobConfiguration {
                 .build();
     }
 
-//    @Bean
-    public Step peopleStep(ItemReader<List<People>> peopleItemReader) {
-        System.out.println("peopleStep = ");
+    @Bean
+    public Step peopleStep(ItemReader<List<PeopleDto>> peopleItemReader) {
         return new StepBuilder("peopleStep", jobRepository)
-                .chunk(100, transactionManager)
+                .chunk(1, transactionManager)
                 .reader(peopleItemReader)
                 .writer(chunk -> {
                     System.out.println("hi");
@@ -55,8 +54,8 @@ public class PeopleJobConfiguration {
                 .build();
     }
 
-//    @Bean
-    public ItemReader<List<People>> peopleItemReader() {
+    @Bean
+    public ItemReader<List<PeopleDto>> peopleItemReader() {
         return new PeopleItemReader(peopleRequestDto, parsingService, objectMapper);
     }
 

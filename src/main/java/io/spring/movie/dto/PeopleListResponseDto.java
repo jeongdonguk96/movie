@@ -16,11 +16,12 @@ public class PeopleListResponseDto {
     public static class PeopleListResult {
         @JsonProperty("totCnt")
         private int totalCount;
-        private List<People> peopleList;
+        @JsonProperty("peopleList")
+        private List<PeopleDto> peopleDtoList;
         private String dataSource;
 
         @Data
-        public static class People {
+        public static class PeopleDto {
             @JsonProperty("peopleCd")
             private String peopleCode;
             @JsonProperty("peopleNm")
