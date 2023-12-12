@@ -20,10 +20,8 @@ public class ParsingService {
         System.out.println("returnStatusCode = " + returnStatusCode);
 
         String responseBody = EntityUtils.toString(response.getEntity());
-
         PeopleListResponseDto peopleResponseDto = objectMapper.readValue(responseBody, PeopleListResponseDto.class);
         PeopleListResult peopleListResult = peopleResponseDto.getPeopleListResult();
-
         System.out.println("조회 데이터 수 = " + peopleListResult.getTotalCount());
 
         return peopleListResult.getPeopleDtoList();

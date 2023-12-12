@@ -31,7 +31,7 @@ public class HttpTest {
     public String test() {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String url = CustomHttpClientService.buildUriParams(peopleRequestDto);
+            String url = CustomHttpClientService.buildUrl(peopleRequestDto);
             HttpGet request = new HttpGet(url); // 예시 URL
 
             // 요청 보내기
@@ -57,7 +57,7 @@ public class HttpTest {
     public String test2() {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String url = CustomHttpClientService.buildUriParams(peopleRequestDto);
+            String url = CustomHttpClientService.buildUrl(peopleRequestDto);
             HttpGet request = new HttpGet(url); // 예시 URL
 
             try (CloseableHttpResponse response = httpclient.execute(request)) {
@@ -94,7 +94,7 @@ public class HttpTest {
     public String test3() {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String url = CustomHttpClientService.buildUriParams(peopleRequestDto);
+            String url = CustomHttpClientService.buildUrl(peopleRequestDto);
             HttpGet request = new HttpGet(url); // 예시 URL
 
             try (CloseableHttpResponse response = httpclient.execute(request)) {

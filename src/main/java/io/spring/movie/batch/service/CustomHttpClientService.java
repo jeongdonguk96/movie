@@ -59,7 +59,7 @@ public class CustomHttpClientService {
 //        return response;
 //    }
 
-    public static String buildUriParams(PeopleListRequestDto peopleRequestDto) {
+    public static String buildUrl(PeopleListRequestDto peopleRequestDto) {
 
         try {
             URIBuilder uriBuilder = new URIBuilder(peopleRequestDto.getUrl());

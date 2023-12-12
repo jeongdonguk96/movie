@@ -1,7 +1,8 @@
 package io.spring.movie.batch.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.spring.movie.batch.reader.PeopleItemReader;
+import io.spring.movie.batch.processor.PeopleTempItemProcessor;
+import io.spring.movie.batch.reader.PeopleListItemReader;
 import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.dto.PeopleListRequestDto;
 import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
@@ -13,6 +14,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PeopleJobConfiguration {
+public class PeopleListJobConfiguration {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
@@ -35,19 +37,20 @@ public class PeopleJobConfiguration {
     private final ObjectMapper objectMapper;
 
     @Bean
-    public Job peopleJob(Step peopleStep) {
-        return new JobBuilder("peopleJob", jobRepository)
+    public Job peopleListJob(Step peopleListStep) {
+        return new JobBuilder("peopleListJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
-                .start(peopleStep)
+                .start(peopleListStep)
 //                .listener()
                 .build();
     }
 
     @Bean
-    public Step peopleStep(ItemReader<List<PeopleDto>> peopleItemReader) {
+    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<PeopleDto>, ?> peopleTempItemProcessor) {
         return new StepBuilder("peopleStep", jobRepository)
                 .chunk(1, transactionManager)
-                .reader(peopleItemReader)
+                .reader(peopleListItemReader)
+                .processor((ItemProcessor<? super Object, ?>) peopleTempItemProcessor)
                 .writer(chunk -> {
                     System.out.println("hi");
                 })
@@ -55,8 +58,15 @@ public class PeopleJobConfiguration {
     }
 
     @Bean
-    public ItemReader<List<PeopleDto>> peopleItemReader() {
-        return new PeopleItemReader(peopleRequestDto, parsingService, objectMapper);
+    public ItemReader<List<PeopleDto>> peopleListItemReader() {
+        return new PeopleListItemReader(peopleRequestDto, parsingService, objectMapper);
     }
+
+    @Bean
+    public ItemProcessor<? super List<PeopleDto>, ?> peopleTempItemProcessor() {
+        return new PeopleTempItemProcessor();
+    }
+
+
 
 }

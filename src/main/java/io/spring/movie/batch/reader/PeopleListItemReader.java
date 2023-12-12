@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class PeopleItemReader implements ItemReader<List<PeopleDto>> {
+public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
 
     private final PeopleListRequestDto peopleRequestDto;
     private final ParsingService parsingService;
@@ -27,7 +27,9 @@ public class PeopleItemReader implements ItemReader<List<PeopleDto>> {
     @Override
     public List<PeopleDto> read() {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String url = CustomHttpClientService.buildUriParams(peopleRequestDto);
+            String url = CustomHttpClientService.buildUrl(peopleRequestDto);
+            System.out.println("url = " + url);
+
             HttpGet request = new HttpGet(url);
             List<PeopleDto> peopleDtoList;
 
@@ -42,7 +44,8 @@ public class PeopleItemReader implements ItemReader<List<PeopleDto>> {
 
             return peopleDtoList;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new CustomBatchException("HTTPCLIENT 통신 중 에러가 발생했습니다.");
         }
     }
 
