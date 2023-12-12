@@ -3,28 +3,27 @@ package io.spring.movie.batch.processor;
 import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import io.spring.movie.entity.ActorTemp;
 import io.spring.movie.entity.DirectorTemp;
+import io.spring.movie.entity.People;
 import org.springframework.batch.item.ItemProcessor;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class PeopleTempItemProcessor implements ItemProcessor<List<PeopleDto>, Map<String, Object>> {
+public class PeopleTempItemProcessor implements ItemProcessor<List<PeopleDto>, List<People>> {
 
     @Override
-    public Map<String, Object> process(List<PeopleDto> item) {
-        Map<String, Object> peopleListMap = new HashMap<>();
+    public List<People> process(List<PeopleDto> item) {
+        List<People> peopleList = new ArrayList<>();
 
         for (PeopleDto peopleDto : item) {
             if ("배우".equals(peopleDto.getRepresentRoleName())) {
-                peopleListMap.put("actor", new ActorTemp(peopleDto.getPeopleCode(), peopleDto.getPeopleName()));
+                peopleList.add(new ActorTemp(peopleDto.getPeopleCode(), peopleDto.getPeopleName()));
             }
             if ("감독".equals(peopleDto.getRepresentRoleName())) {
-                peopleListMap.put("director", new DirectorTemp(peopleDto.getPeopleCode(), peopleDto.getPeopleName()));
+                peopleList.add(new DirectorTemp(peopleDto.getPeopleCode(), peopleDto.getPeopleName()));
             }
         }
-        System.out.println("map에 담긴 수 = " + peopleListMap.size());
 
-        return peopleListMap;
+        return peopleList;
     }
 }
