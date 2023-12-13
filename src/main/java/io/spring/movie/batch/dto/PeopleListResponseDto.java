@@ -1,4 +1,4 @@
-package io.spring.movie.dto;
+package io.spring.movie.batch.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

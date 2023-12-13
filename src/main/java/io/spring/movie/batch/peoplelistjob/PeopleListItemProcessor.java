@@ -1,6 +1,6 @@
 package io.spring.movie.batch.peoplelistjob;
 
-import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import io.spring.movie.entity.ActorTemp;
 import io.spring.movie.entity.DirectorTemp;
 import io.spring.movie.entity.People;

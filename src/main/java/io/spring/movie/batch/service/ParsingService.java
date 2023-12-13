@@ -1,9 +1,9 @@
 package io.spring.movie.batch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.spring.movie.dto.PeopleListResponseDto;
-import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult;
-import io.spring.movie.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;

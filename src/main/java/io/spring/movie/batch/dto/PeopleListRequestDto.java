@@ -1,4 +1,4 @@
-package io.spring.movie.dto;
+package io.spring.movie.batch.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PeopleListRequestDto {
-    @Value("${movie.config.url}")
+    @Value("${movie.peopleList-api.url}")
     private String url;
-    @Value("${movie.config.key}")
+    @Value("${movie.peopleList-api.key}")
     private String key;
-    @Value("${movie.config.curPage}")
+    @Value("${movie.peopleList-api.curPage}")
     private String curPage;
-    @Value("${movie.config.itemPerPage}")
+    @Value("${movie.peopleList-api.itemPerPage}")
     private String itemPerPage;
-    @Value("${movie.config.peopleName}")
+    @Value("${movie.peopleList-api.peopleName}")
     private String peopleName;
-    @Value("${movie.config.filmographyName}")
+    @Value("${movie.peopleList-api.filmographyName}")
     private String filmographyName;
 }

@@ -1,6 +1,6 @@
 package io.spring.movie.batch.service;
 
-import io.spring.movie.dto.PeopleListRequestDto;
+import io.spring.movie.batch.dto.PeopleListRequestDto;
 import io.spring.movie.exception.CustomBatchException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;

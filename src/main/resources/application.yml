@@ -20,12 +20,15 @@ spring:
   batch:
     jdbc:
       initialize-schema: never
+#    job:
+#      enabled: false
 
 movie:
-  config:
+  peopleList-api:
     url: http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json
     key: 52fdceb2126442ff1e661ee05bcb4058
     curPage: 1
     itemPerPage: 100
     peopleName:
     filmographyName:
+    chunk: 1
