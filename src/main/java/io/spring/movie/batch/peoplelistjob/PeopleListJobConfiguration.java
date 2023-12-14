@@ -2,9 +2,9 @@ package io.spring.movie.batch.peoplelistjob;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.spring.movie.batch.config.ChunkConfigReader;
-import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.batch.dto.PeopleListRequestDto;
-import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
+import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.entity.People;
 import io.spring.movie.repository.ActorTempRepository;
 import io.spring.movie.repository.DirectorTempRepository;

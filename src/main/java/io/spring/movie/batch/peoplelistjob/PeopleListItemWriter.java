@@ -19,13 +19,15 @@ public class PeopleListItemWriter implements ItemWriter<List<People>> {
 
     @Override
     public void write(Chunk<? extends List<People>> chunks) {
-        for (List<People> chunk : chunks) {
-            for (People people : chunk) {
-                if (people instanceof ActorTemp) {
-                    actorTempRepository.save((ActorTemp) people);
-                }
-                if (people instanceof DirectorTemp) {
-                    directorTempRepository.save((DirectorTemp) people);
+        if (chunks != null) {
+            for (List<People> chunk : chunks) {
+                for (People people : chunk) {
+                    if (people instanceof ActorTemp) {
+                        actorTempRepository.save((ActorTemp) people);
+                    }
+                    if (people instanceof DirectorTemp) {
+                        directorTempRepository.save((DirectorTemp) people);
+                    }
                 }
             }
         }

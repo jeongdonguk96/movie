@@ -5,7 +5,7 @@ import io.spring.movie.batch.service.CustomHttpClientService;
 import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.batch.dto.PeopleListRequestDto;
 import io.spring.movie.batch.dto.PeopleListResponseDto;
-import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
 import io.spring.movie.exception.CustomBatchException;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -67,7 +67,7 @@ public class HttpTest {
                 String responseBody = EntityUtils.toString(response.getEntity());
 
                 PeopleListResponseDto peopleResponseDto = objectMapper.readValue(responseBody, PeopleListResponseDto.class);
-                PeopleListResponseDto.PeopleListResult peopleListResult = peopleResponseDto.getPeopleListResult();
+                PeopleListResponseDto.PeopleListResultDto peopleListResult = peopleResponseDto.getPeopleListResult();
 
                 System.out.println("조회 데이터 수 = " + peopleListResult.getTotalCount());
 
@@ -98,7 +98,7 @@ public class HttpTest {
             HttpGet request = new HttpGet(url); // 예시 URL
 
             try (CloseableHttpResponse response = httpclient.execute(request)) {
-                List<PeopleDto> peopleList = parsingService.parseJsonToPeopleListResponseDto(response, objectMapper);
+                List<PeopleDto> peopleList = parsingService.parseJsonToPeopleDtoList(response, objectMapper);
                 System.out.println("peopleList = " + peopleList);
 
             } catch (ParseException e) {

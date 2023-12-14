@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 public class PeopleListResponseDto {
 
-    private PeopleListResult peopleListResult;
+    private PeopleListResultDto peopleListResult;
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class PeopleListResult {
+    public static class PeopleListResultDto {
         @JsonProperty("totCnt")
         private int totalCount;
         @JsonProperty("peopleList")

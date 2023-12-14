@@ -1,10 +1,11 @@
 package io.spring.movie.batch.peoplelistjob;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.spring.movie.batch.dto.PeopleListRequestDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto;
+import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
 import io.spring.movie.batch.service.CustomHttpClientService;
 import io.spring.movie.batch.service.ParsingService;
-import io.spring.movie.batch.dto.PeopleListRequestDto;
-import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResult.PeopleDto;
 import io.spring.movie.exception.CustomBatchException;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -23,50 +24,48 @@ public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
     private final PeopleListRequestDto peopleRequestDto;
     private final ParsingService parsingService;
     private final ObjectMapper objectMapper;
+    private int currentPage = 1;
+    private double totalPage = 1;
 
     @Override
     public List<PeopleDto> read() {
-        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String url = CustomHttpClientService.buildUrl(peopleRequestDto);
-            System.out.println("url = " + url);
+        if (currentPage <= totalPage + 1) {
+            System.out.println("currentPage = " + currentPage);
 
-            HttpGet request = new HttpGet(url);
-            List<PeopleDto> peopleDtoList;
+            try {
+                CloseableHttpClient httpclient = HttpClients.createDefault();
+                peopleRequestDto.setCurPage(String.valueOf(currentPage));
+                String url = CustomHttpClientService.buildUrl(peopleRequestDto);
+                System.out.println("URL: " + url);
 
-            try (CloseableHttpResponse response = httpclient.execute(request)) {
-                peopleDtoList = parsingService.parseJsonToPeopleListResponseDto(response, objectMapper);
-                System.out.println("peopleDtoList = " + peopleDtoList);
+                HttpGet request = new HttpGet(url);
+                List<PeopleDto> peopleDtoList;
+                PeopleListResultDto peopleListResultDto;
 
-            } catch (ParseException e) {
+                try (CloseableHttpResponse response = httpclient.execute(request)) {
+                    peopleListResultDto = parsingService.parseJsonToPeopleListResultDto(response, objectMapper);
+                    if (peopleListResultDto == null) {
+                        return null;
+                    }
+                    peopleDtoList = peopleListResultDto.getPeopleDtoList();
+                    int totalCount = peopleListResultDto.getTotalCount();
+
+                    totalPage = (double) totalCount / 100;
+                    System.out.println("totalPage = " + totalPage);
+                    currentPage++; // 다음 페이지로 이동
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    throw new CustomBatchException("JSON 데이터를 파싱하는 중 에러가 발생했습니다.");
+                }
+
+                return peopleDtoList;
+            } catch (IOException e) {
                 e.printStackTrace();
-                throw new CustomBatchException("JSON 데이터를 파싱하는 중 에러가 발생했습니다.");
+                throw new CustomBatchException("HTTPCLIENT 통신 중 에러가 발생했습니다.");
             }
-
-            return peopleDtoList;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new CustomBatchException("HTTPCLIENT 통신 중 에러가 발생했습니다.");
+        } else {
+            return null; // 데이터의 끝을 나타냅니다
         }
     }
-
-//    @Override
-//    public List<People> read() {
-//        System.out.println("reader");
-//        String url = CustomHttpClientService.buildUriParams(peopleRequestDto);
-//        List<People> peopleList;
-//
-//        try (CloseableHttpResponse response = CustomHttpClientService.executeGet(url)) {
-//            peopleList = parsingService.parseJsonToPeopleListResponseDto(response, objectMapper);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new CustomBatchException("HTTP GET 요청 중 에러가 발생했습니다.");
-//
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            throw new CustomBatchException("JSON 데이터를 파싱하는 중 에러가 발생했습니다.");
-//        }
-//
-//        return peopleList;
-//    }
 }
