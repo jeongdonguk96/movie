@@ -6,8 +6,10 @@ import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto;
 import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
 import io.spring.movie.batch.service.CustomHttpClientService;
 import io.spring.movie.batch.service.ParsingService;
+import io.spring.movie.exception.CustomApiException;
 import io.spring.movie.exception.CustomBatchException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -18,6 +20,7 @@ import org.springframework.batch.item.ItemReader;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
 
@@ -28,15 +31,17 @@ public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
     private double totalPage = 1;
 
     @Override
-    public List<PeopleDto> read() {
+    public List<PeopleDto> read() throws InterruptedException {
+        Thread.sleep(5000);
+
         if (currentPage <= totalPage + 1) {
-            System.out.println("currentPage = " + currentPage);
+            log.info("currentPage = " + currentPage);
 
             try {
                 CloseableHttpClient httpclient = HttpClients.createDefault();
                 peopleRequestDto.setCurPage(String.valueOf(currentPage));
                 String url = CustomHttpClientService.buildUrl(peopleRequestDto);
-                System.out.println("URL: " + url);
+                log.info("URL = " + url);
 
                 HttpGet request = new HttpGet(url);
                 List<PeopleDto> peopleDtoList;
@@ -45,13 +50,15 @@ public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
                 try (CloseableHttpResponse response = httpclient.execute(request)) {
                     peopleListResultDto = parsingService.parseJsonToPeopleListResultDto(response, objectMapper);
                     if (peopleListResultDto == null) {
-                        return null;
+                        throw new CustomApiException("서버 측 API 응답에 에러가 포함되어 있습니다.");
                     }
                     peopleDtoList = peopleListResultDto.getPeopleDtoList();
                     int totalCount = peopleListResultDto.getTotalCount();
 
                     totalPage = (double) totalCount / 100;
-                    System.out.println("totalPage = " + totalPage);
+                    if (currentPage == 1) {
+                        log.info("totalPage = " + totalPage);
+                    }
                     currentPage++; // 다음 페이지로 이동
 
                 } catch (ParseException e) {

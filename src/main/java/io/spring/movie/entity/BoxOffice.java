@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class BoxOffice {
+public class BoxOffice extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "boxoffice_id")
     private Long boxofficeId;                       // 박스오피스 번호
     private String ranking;                         // 순위

@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Company {
+public class Company extends BaseEntity {
     @Id  @Column(name = "company_code")
     private Long companyCode;                                    // 영화사 코드
     private String companyName;                                  // 영화사 이름

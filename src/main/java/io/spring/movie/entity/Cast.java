@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Cast {
+public class Cast extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "cast_id")
     private Long castId;              // 캐스트 번호
     private String peopleName;        // 배우 이름

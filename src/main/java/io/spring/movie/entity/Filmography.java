@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Filmography {
+public class Filmography extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "filmography_id")
     private Long filmographyId;     // 필모그래피 번호
     private Long movieCode;         // 영화 코드

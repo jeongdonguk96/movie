@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Actor {
+public class Actor extends BaseEntity {
     @Id @Column(name = "actor_people_code")
     private Long peopleCode;                                     // 영화인 코드
     private String peopleName;                                   // 영화인 이름

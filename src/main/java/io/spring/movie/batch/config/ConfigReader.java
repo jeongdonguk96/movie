@@ -6,7 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class ChunkConfigReader {
+public class ConfigReader {
     @Value("${movie.peopleList-api.chunk}")
     private int peopleListApiChunk;
+
+    @Value("${movie.peopleList-api.skipLimit}")
+    private int skipLimit;
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Movie {
+public class Movie extends BaseEntity {
     @Id  @Column(name = "movie_code")
     private Long movieCode;                               // 영화 코드
     private String movieName;                             // 영화 제목
