@@ -32,7 +32,7 @@ public class PeopleListItemReader implements ItemReader<List<PeopleDto>> {
 
     @Override
     public List<PeopleDto> read() throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         if (currentPage <= totalPage + 1) {
             log.info("currentPage = " + currentPage);
