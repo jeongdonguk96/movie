@@ -1,14 +1,12 @@
 package io.spring.movie.batch.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Data
-@Builder
 @Component
 @NoArgsConstructor
 @AllArgsConstructor

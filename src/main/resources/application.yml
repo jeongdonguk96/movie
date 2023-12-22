@@ -12,7 +12,7 @@ spring:
     open-in-view: false
     show-sql: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -21,16 +21,22 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: false
+      enabled: true
 
 movie:
   peopleList-api:
     url: http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json
-    key: 52fdceb2126442ff1e661ee05bcb4058
+    key: 02b247af5f8446cb1a02deaebc9917bf
     curPage: 1
     itemPerPage: 100
     peopleName:
     filmographyName:
     chunk: 1
     skipLimit: 1679
-    cron: 0 35 14 * * ?
+    cron: 0 23 16 * * ?
+  people-api:
+    url: http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleInfo.json
+    key: 02b247af5f8446cb1a02deaebc9917bf
+    peopleCode:
+    chunk: 10
+    csv-path: C:\\Users\\nb18-03hp\\csv\\peopleList.csv

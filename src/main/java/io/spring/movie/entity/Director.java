@@ -1,5 +1,6 @@
 package io.spring.movie.entity;
 
+import io.spring.movie.batch.dto.PeopleResponseDto.PeopleInfoResultDto.PeopleInfoDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,10 @@ public class Director extends BaseEntity {
 
     @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Filmography> filmographies = new ArrayList<>(); // 필모그래피
+
+    public Director(PeopleInfoDto peopleInfoDto) {
+        this.peopleCode = peopleInfoDto.getPeopleCode();
+        this.peopleName = peopleInfoDto.getPeopleName();
+        this.sex = peopleInfoDto.getSex();
+    }
 }

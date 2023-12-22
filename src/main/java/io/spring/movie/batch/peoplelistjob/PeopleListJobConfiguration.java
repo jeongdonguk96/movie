@@ -5,7 +5,7 @@ import io.spring.movie.batch.config.ConfigReader;
 import io.spring.movie.batch.dto.PeopleListRequestDto;
 import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
 import io.spring.movie.batch.service.ParsingService;
-import io.spring.movie.entity.People;
+import io.spring.movie.batch.temp.PeopleTemp;
 import io.spring.movie.exception.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +32,14 @@ import java.util.List;
 public class PeopleListJobConfiguration {
 
     private final PlatformTransactionManager transactionManager;
-    private final ConfigReader configReader;
     private final JobRepository jobRepository;
+    private final ConfigReader configReader;
 
     private final PeopleListRequestDto peopleRequestDto;
     private final ParsingService parsingService;
     private final ObjectMapper objectMapper;
 
-    @Bean
+//    @Bean
     public Job peopleListJob(Step peopleListStep, PeopleListJobListener peopleListJobListener) {
         return new JobBuilder("peopleListJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
@@ -48,8 +48,8 @@ public class PeopleListJobConfiguration {
                 .build();
     }
 
-    @Bean
-    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<People>, ?> peopleListItemProcessor, ItemWriter<? super List<People>> peopleListFlatFileItemWriter) {
+//    @Bean
+    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<PeopleTemp>, ?> peopleListItemProcessor, ItemWriter<? super List<PeopleTemp>> peopleListFlatFileItemWriter) {
         return new StepBuilder("peopleStep", jobRepository)
                 .chunk(configReader.getPeopleListApiChunk(), transactionManager)
                 .reader(peopleListItemReader)
@@ -66,51 +66,30 @@ public class PeopleListJobConfiguration {
         return new PeopleListJobListener();
     }
 
-    @Bean
+//    @Bean
     public ItemReader<List<PeopleDto>> peopleListItemReader() {
         return new PeopleListItemReader(peopleRequestDto, parsingService, objectMapper);
     }
 
-    @Bean
+//    @Bean
     public ItemProcessor<? super List<PeopleDto>, ?> peopleListItemProcessor() {
         return new PeopleListItemProcessor();
     }
 
-    @Bean
-    public FlatFileItemWriter<? super List<People>> peopleListFlatFileItemWriter() {
+//    @Bean
+    public FlatFileItemWriter<? super List<PeopleTemp>> peopleListFlatFileItemWriter() {
         String directoryPath = "C:\\Users\\nb18-03hp\\csv";
-        String actorFilePath = "C:\\Users\\nb18-03hp\\csv\\actorList.csv";
-        String directorFilePath = "C:\\Users\\nb18-03hp\\csv\\directorList.csv";
+        String filePath = "C:\\Users\\nb18-03hp\\csv\\peopleList.csv";
         File directory = new File(directoryPath);
 
         if (!directory.exists()) {
             if (directory.mkdirs()) {
-                log.info("이미 존재하는 디렉토리입니다. 기존 디렉토리를 사용합니다.");
-            } else {
                 log.info("존재하지 않는 디렉토리입니다. 디렉토리를 생성합니다.");
             }
-            log.info("디렉토리 경로 = " + directorFilePath);
+        } else {
+            log.info("이미 존재하는 디렉토리입니다. 기존 디렉토리를 사용합니다.");
         }
-        return new PeopleListFlatFileItemWriter(actorFilePath, directorFilePath);
+        log.info("디렉토리 경로 = " + directoryPath);
+        return new PeopleListFlatFileItemWriter(filePath);
     }
-
-    /* 기존 DB Writer 설정
-    @Bean
-    public Step peopleListStep(ItemReader<List<PeopleDto>> peopleListItemReader, ItemProcessor<? super List<People>, ?> peopleListItemProcessor, ItemWriter<? super List<People>> peopleListItemWriter) {
-        return new StepBuilder("peopleStep", jobRepository)
-                .chunk(configReader.getPeopleListApiChunk(), transactionManager)
-                .reader(peopleListItemReader)
-                .processor((ItemProcessor<? super Object, ?>) peopleListItemProcessor)
-                .writer((ItemWriter<? super Object>) peopleListItemWriter)
-                .faultTolerant()
-                .skip(CustomApiException.class)
-                .skipLimit(configReader.getSkipLimit()/2)
-                .build();
-    }
-
-    @Bean
-    public ItemWriter<? super List<People>> peopleListItemWriter() {
-        return new PeopleListItemWriter(actorTempRepository, directorTempRepository);
-    }
-    */
 }

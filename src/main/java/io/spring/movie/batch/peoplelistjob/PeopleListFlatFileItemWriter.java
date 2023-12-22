@@ -1,8 +1,6 @@
 package io.spring.movie.batch.peoplelistjob;
 
-import io.spring.movie.entity.ActorTemp;
-import io.spring.movie.entity.DirectorTemp;
-import io.spring.movie.entity.People;
+import io.spring.movie.batch.temp.PeopleTemp;
 import io.spring.movie.exception.CustomBatchException;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.file.FlatFileItemWriter;
@@ -16,42 +14,30 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class PeopleListFlatFileItemWriter extends FlatFileItemWriter<List<People>> {
+public class PeopleListFlatFileItemWriter extends FlatFileItemWriter<List<PeopleTemp>> {
 
-    private final String actorFilePath;
-    private final String directorFilePath;
+    private final String filePath;
 
-    public PeopleListFlatFileItemWriter(String actorFilePath, String directorFilePath) {
-        this.actorFilePath = actorFilePath;
-        this.directorFilePath = directorFilePath;
-        WritableResource actorResource = new FileSystemResource(actorFilePath);
-        WritableResource directorResource = new FileSystemResource(directorFilePath);
-        LineAggregator<List<People>> lineAggregator = new PassThroughLineAggregator<>();
+    public PeopleListFlatFileItemWriter(String filePath) {
+        this.filePath = filePath;
+        WritableResource resource = new FileSystemResource(filePath);
+        LineAggregator<List<PeopleTemp>> lineAggregator = new PassThroughLineAggregator<>();
 
         this.setEncoding("UTF-8");
-        this.setResource(actorResource);
-        this.setResource(directorResource);
+        this.setResource(resource);
         this.setLineAggregator(lineAggregator);
     }
 
     @Override
-    public void write(Chunk<? extends List<People>> chunks) {
+    public void write(Chunk<? extends List<PeopleTemp>> chunks) {
 
-        try (BufferedWriter actorWriter = new BufferedWriter(new FileWriter(actorFilePath, true));
-             BufferedWriter directorWriter = new BufferedWriter(new FileWriter(directorFilePath, true))) {
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             if (chunks != null) {
-                for (List<People> chunk : chunks) {
-                    for (People people : chunk) {
-                        if (people instanceof ActorTemp actorTemp) {
-                            String line = String.format("%s,%s", actorTemp.getPeopleCode(), actorTemp.getPeopleName());
-                            actorWriter.write(line);
-                            actorWriter.newLine();
-                        } else if (people instanceof DirectorTemp directorTemp) {
-                            String line = String.format("%s,%s", directorTemp.getPeopleCode(), directorTemp.getPeopleName());
-                            directorWriter.write(line);
-                            directorWriter.newLine();
-                        }
+                for (List<PeopleTemp> chunk : chunks) {
+                    for (PeopleTemp peopleTemp : chunk) {
+                        String line = String.format("%s,%s", peopleTemp.getPeopleCode(), peopleTemp.getPeopleName());
+                        writer.write(line);
+                        writer.newLine();
                     }
                 }
             }

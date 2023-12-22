@@ -12,4 +12,10 @@ public class ConfigReader {
 
     @Value("${movie.peopleList-api.skipLimit}")
     private int skipLimit;
+
+    @Value("${movie.people-api.chunk}")
+    private int peopleApiChunk;
+
+    @Value("${movie.people-api.csv-path}")
+    private String peopleApiCsvPath;
 }

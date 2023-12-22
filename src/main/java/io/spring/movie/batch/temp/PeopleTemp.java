@@ -1,4 +1,4 @@
-package io.spring.movie.entity;
+package io.spring.movie.batch.temp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActorTemp extends People {
+public class PeopleTemp {
     private String peopleCode; // 영화인 코드
     private String peopleName; // 영화인 이름
 }
