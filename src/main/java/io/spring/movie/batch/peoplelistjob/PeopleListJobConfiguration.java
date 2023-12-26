@@ -58,7 +58,7 @@ public class PeopleListJobConfiguration {
                 .writer((ItemWriter<? super Object>) peopleListFlatFileItemWriter)
                 .faultTolerant()
                 .skip(CustomApiException.class)
-                .skipLimit(configReader.getSkipLimit()/2)
+                .skipLimit(configReader.getPeopleListSkipLimit())
                 .build();
     }
 

@@ -45,11 +45,11 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
     public PeopleInfoDto read() throws InterruptedException {
         Thread.sleep(1000);
 
-        // 배우와 감독의 CSV 파일을 읽어와 각각 List에 담는다
+        // CSV 파일을 읽어와 각각 List에 담는다. Job 최초 read() 시에만 동작한다.
         if (readCount == 1) {
             try {
                 Path peopleListCsvPath = Paths.get(configReader.getPeopleApiCsvPath());
-                readCSVFile(peopleListCsvPath);
+                peopleCodes = readCSVFile(peopleListCsvPath);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new CustomBatchException("CSV 파일을 읽는 중 에러가 발생했습니다.");
@@ -88,9 +88,8 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
         }
     }
 
-    private void readCSVFile(Path filePath) throws IOException {
+    private List<String> readCSVFile(Path filePath) throws IOException {
         List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
-        log.info("lines.get(0) = " + lines.get(0));
 
         for (String line : lines) {
             String[] data = line.split(",");
@@ -98,12 +97,13 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
             peopleCodes.add(code);
         }
         log.info("CSV 파일의 데이터 수 = " + peopleCodes.size());
+
+        return peopleCodes;
     }
 
     private PeopleInfoDto returnItem(String responseBody) throws JsonProcessingException {
         PeopleResponseDto peopleResponseDto = parsingService.convertStringToDto(objectMapper, responseBody, PeopleResponseDto.class);
         PeopleInfoResultDto peopleInfoResultDto = peopleResponseDto.getPeopleInfoResult();
-        log.info("peopleInfoDto = " + peopleInfoResultDto.getPeopleInfoDto());
 
         index++;
         readCount++;

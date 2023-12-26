@@ -62,7 +62,7 @@ public class PeopleJobConfiguration {
                 .writer(peopleItemWriter)
                 .faultTolerant()
                 .skip(CustomApiException.class)
-                .skipLimit(configReader.getSkipLimit())
+                .skipLimit(configReader.getPeopleSkipLimit())
                 .build();
     }
 
