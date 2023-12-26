@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.spring.movie.batch.config.ConfigReader;
 import io.spring.movie.batch.dto.PeopleRequestDto;
 import io.spring.movie.batch.dto.PeopleResponseDto.PeopleInfoResultDto.PeopleInfoDto;
+import io.spring.movie.batch.listener.CustomJobListener;
 import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.exception.CustomApiException;
 import jakarta.persistence.EntityManagerFactory;
@@ -19,7 +20,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -40,15 +40,21 @@ public class PeopleJobConfiguration {
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
-    public Job peopleJob(Step peopleStep) {
+    public Job peopleJob(Step peopleStep, CustomJobListener peopleJobListener) {
         return new JobBuilder("peopleJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(peopleStep)
+                .listener(peopleJobListener)
                 .build();
     }
 
     @Bean
-    public Step peopleStep(ItemReader<PeopleInfoDto> peopleItemReader, ItemProcessor<? super PeopleInfoDto, ?> peopleItemProcessor, ItemWriter<Object> peopleItemWriter) {
+    public CustomJobListener peopleJobListener() {
+        return new CustomJobListener();
+    }
+
+    @Bean
+    public Step peopleStep(ItemReader<PeopleInfoDto> peopleItemReader, ItemProcessor<? super PeopleInfoDto, ?> peopleItemProcessor, ItemWriter<? super Object> peopleItemWriter) {
         return new StepBuilder("peopleStep", jobRepository)
                 .chunk(configReader.getPeopleApiChunk(), transactionManager)
                 .reader(peopleItemReader)
@@ -70,16 +76,11 @@ public class PeopleJobConfiguration {
         return new PeopleItemProcessor();
     }
 
-//    @Bean
-//    public ItemWriter<Map<String, Object>> peopleItemWriter() {
-//        return new PeopleItemWriter(entityManagerFactory);
-//    }
-
     @Bean
     public JpaItemWriter<Object> peopleItemWriter() {
-        return new JpaItemWriterBuilder<>()
-                .usePersist(true)
-                .entityManagerFactory(entityManagerFactory)
-                .build();
+        PeopleItemWriter itemWriter = new PeopleItemWriter(entityManagerFactory);
+        itemWriter.setEntityManagerFactory(entityManagerFactory);
+
+        return itemWriter;
     }
 }

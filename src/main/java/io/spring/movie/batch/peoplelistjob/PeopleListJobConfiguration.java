@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.spring.movie.batch.config.ConfigReader;
 import io.spring.movie.batch.dto.PeopleListRequestDto;
 import io.spring.movie.batch.dto.PeopleListResponseDto.PeopleListResultDto.PeopleDto;
+import io.spring.movie.batch.listener.CustomJobListener;
 import io.spring.movie.batch.service.ParsingService;
 import io.spring.movie.batch.temp.PeopleTemp;
 import io.spring.movie.exception.CustomApiException;
@@ -40,7 +41,7 @@ public class PeopleListJobConfiguration {
     private final ObjectMapper objectMapper;
 
 //    @Bean
-    public Job peopleListJob(Step peopleListStep, PeopleListJobListener peopleListJobListener) {
+    public Job peopleListJob(Step peopleListStep, CustomJobListener peopleListJobListener) {
         return new JobBuilder("peopleListJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(peopleListStep)
@@ -62,8 +63,8 @@ public class PeopleListJobConfiguration {
     }
 
     @Bean
-    public PeopleListJobListener peopleListJobListener() {
-        return new PeopleListJobListener();
+    public CustomJobListener peopleListJobListener() {
+        return new CustomJobListener();
     }
 
 //    @Bean
