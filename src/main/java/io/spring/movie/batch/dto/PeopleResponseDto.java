@@ -26,7 +26,7 @@ public class PeopleResponseDto {
             private String peopleName;
             @JsonProperty("sex")
             private String sex;
-            @JsonProperty("reoRoleNm")
+            @JsonProperty("repRoleNm")
             private String roleName;
             @JsonProperty("filmos")
             private List<FilmoDto> filmoDto;

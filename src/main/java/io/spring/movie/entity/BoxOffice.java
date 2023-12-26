@@ -31,6 +31,6 @@ public class BoxOffice extends BaseEntity {
     private String showCount;                       // 해당일 상영 횟수
     private String boxofficeGubun;                  // 일별/주간별 구분
 
-    @OneToMany(mappedBy = "boxOffice", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "boxOffice", fetch = FetchType.LAZY)
     private List<Movie> movies = new ArrayList<>(); // 영화 정보
 }

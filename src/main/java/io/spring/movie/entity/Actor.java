@@ -20,11 +20,10 @@ public class Actor extends BaseEntity {
     private String peopleName;                                   // 영화인 이름
     private String sex;                                          // 성별
 
-    @JoinColumn(name = "movie_code")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Movie movie;                                         // 영화
+    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
+    private List<PeopleMovie> peopleMovies = new ArrayList<>();  // 영화 (@ManyToMany 대체)
 
-    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
     private List<Filmography> filmographies = new ArrayList<>(); // 필모그래피
 
     public Actor(PeopleInfoDto peopleInfoDto) {

@@ -24,6 +24,6 @@ public class Company extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Movie movie;                                         // 영화
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<Filmography> filmographies = new ArrayList<>(); // 필모그래피
 }

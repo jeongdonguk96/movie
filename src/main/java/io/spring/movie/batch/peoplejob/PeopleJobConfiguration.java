@@ -5,6 +5,7 @@ import io.spring.movie.batch.config.ConfigReader;
 import io.spring.movie.batch.dto.PeopleRequestDto;
 import io.spring.movie.batch.dto.PeopleResponseDto.PeopleInfoResultDto.PeopleInfoDto;
 import io.spring.movie.batch.service.ParsingService;
+import io.spring.movie.exception.CustomApiException;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,9 @@ public class PeopleJobConfiguration {
                 .reader(peopleItemReader)
                 .processor((ItemProcessor<? super Object, ?>) peopleItemProcessor)
                 .writer(peopleItemWriter)
+                .faultTolerant()
+                .skip(CustomApiException.class)
+                .skipLimit(configReader.getSkipLimit())
                 .build();
     }
 
