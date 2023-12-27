@@ -22,6 +22,7 @@ public class PeopleItemWriter extends JpaItemWriter<Object> {
 
             for (Object item : items) {
                 entityManager.merge(item);
+                log.info("item = " + item);
             }
 
             entityManager.getTransaction().commit();

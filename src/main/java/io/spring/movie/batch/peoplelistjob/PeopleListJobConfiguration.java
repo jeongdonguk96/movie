@@ -20,7 +20,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -62,7 +61,7 @@ public class PeopleListJobConfiguration {
                 .build();
     }
 
-    @Bean
+//    @Bean
     public CustomJobListener peopleListJobListener() {
         return new CustomJobListener();
     }

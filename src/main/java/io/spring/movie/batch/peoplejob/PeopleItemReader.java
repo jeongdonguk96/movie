@@ -38,18 +38,19 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
     private final ConfigReader configReader;
 
     private List<String> peopleCodes = new ArrayList<>();
-    private int readCount = 1;
-    private int index = 0;
+    private int readCount = 0;
+    private int index = 6949;
 
     @Override
     public PeopleInfoDto read() throws InterruptedException {
         Thread.sleep(1000);
 
         // CSV 파일을 읽어와 각각 List에 담는다. Job 최초 read() 시에만 동작한다.
-        if (readCount == 1) {
+        if (readCount == 0) {
             try {
                 Path peopleListCsvPath = Paths.get(configReader.getPeopleApiCsvPath());
                 peopleCodes = readCSVFile(peopleListCsvPath);
+                readCount++;
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new CustomBatchException("CSV 파일을 읽는 중 에러가 발생했습니다.");
@@ -83,7 +84,7 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
         } else {
 
             index = 0;     // 값 초기화
-            readCount = 1; // 값 초기화
+            readCount = 0; // 값 초기화
             return null; // 요청할 데이터가 없어 Job이 끝남을 의미한다.
         }
     }
@@ -106,7 +107,6 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
         PeopleInfoResultDto peopleInfoResultDto = peopleResponseDto.getPeopleInfoResult();
 
         index++;
-        readCount++;
         return peopleInfoResultDto.getPeopleInfoDto();
     }
 }
