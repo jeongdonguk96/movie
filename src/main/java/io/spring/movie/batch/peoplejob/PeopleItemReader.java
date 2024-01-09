@@ -39,7 +39,7 @@ public class PeopleItemReader implements ItemReader<PeopleInfoDto> {
 
     private List<String> peopleCodes = new ArrayList<>();
     private int readCount = 0;
-    private int index = 6949;
+    private int index = 34427;
 
     @Override
     public PeopleInfoDto read() throws InterruptedException {
