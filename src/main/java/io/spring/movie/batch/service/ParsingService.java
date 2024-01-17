@@ -27,7 +27,7 @@ public class ParsingService {
         return responseBody;
     }
 
-    public <T> T convertStringToDto(ObjectMapper objectMapper, String jsonString, Class<T> dtoClass) throws JsonProcessingException {
-        return objectMapper.readValue(jsonString, dtoClass);
+    public <T> T convertStringToDto(ObjectMapper objectMapper, String jsonString, Class<T> responseBody) throws JsonProcessingException {
+        return objectMapper.readValue(jsonString, responseBody);
     }
 }
